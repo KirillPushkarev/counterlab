@@ -12,7 +12,6 @@ public class LockZero implements ILock {
         flag[me] = true;
     }
 
-
     @Override
     public void unlock() {
         flag[TwoThreadIds.me()] = false;

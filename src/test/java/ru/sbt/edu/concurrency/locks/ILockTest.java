@@ -1,32 +1,42 @@
 package ru.sbt.edu.concurrency.locks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import ru.sbt.edu.concurrency.counter.Counter;
 import ru.sbt.edu.concurrency.counter.ILockCounter;
+import ru.sbt.edu.concurrency.counter.MagicCounter;
 import ru.sbt.edu.concurrency.counter.SeqCounter;
-import ru.sbt.edu.concurrency.locks.theory.LockTwo;
-import ru.sbt.edu.concurrency.locks.theory.LockZero;
+import ru.sbt.edu.concurrency.locks.theory.PetersonLock;
 import ru.sbt.edu.concurrency.util.TwoThreadIds;
 
-import static junit.framework.TestCase.assertEquals;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ILockTest {
     @Test
-    public void testTheoryLock()  {
-        ILock lock = new LockZero();
+    public void testTheoryLock() {
+        ILock lock = new PetersonLock();
         Counter counter = new ILockCounter(lock);
         //try: 1, 2, 10, 100, 1000
-        testCounter(counter, 1);
+        testCounter(counter, 10000, 2);
     }
 
     @Test
-    public void testNaiveCounter()  {
+    public void testNaiveCounter() {
         Counter counter = new SeqCounter();
 
-        testCounter(counter, 1000);
+        testCounter(counter, 1000, 2);
     }
 
-    private void testCounter(Counter counter, int iters) {
+    @Test
+    public void testMagicCounter() {
+        Counter counter = new MagicCounter(2);
+
+        testCounter(counter, 1000, 2);
+    }
+
+    private void testCounter(Counter counter, int iters, int threadsCount) {
         Runnable increment = () -> {
             System.out.println(TwoThreadIds.me());
             for (int i = 0; i < iters; i++) {
@@ -34,20 +44,24 @@ public class ILockTest {
             }
         };
 
-        Thread t0 = new Thread(increment);
-        Thread t1 = new Thread(increment);
-        t0.start();
-        t1.start();
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < threadsCount; i++) {
+            threads.add(new Thread(increment));
+        }
+        for (Thread thread : threads) {
+            thread.start();
+        }
 
         try {
-            t0.join();
-            t1.join();
+            for (Thread thread : threads) {
+                thread.join();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         long count = counter.getValue();
         System.out.println(count);
-        assertEquals("Oops! Unexpected Behaviour!", iters * 2, count);
+        assertEquals((long) iters * threadsCount, count);
     }
 }
