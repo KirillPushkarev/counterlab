@@ -1,17 +1,22 @@
 package ru.sbt.edu.concurrency.counter;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ConcurrentCounter implements Counter {
-    private final AtomicLong value = new AtomicLong(0);
+    private final String DEFAULT_KEY = "key";
+    private final ConcurrentHashMap<String, Long> countByKey = new ConcurrentHashMap<>();
+
+    public ConcurrentCounter() {
+        countByKey.put(DEFAULT_KEY, 0L);
+    }
 
     @Override
     public void increment() {
-        value.incrementAndGet();
+        countByKey.compute(DEFAULT_KEY, (key, value) -> value + 1);
     }
 
     @Override
     public long getValue() {
-        return value.longValue();
+        return countByKey.get(DEFAULT_KEY);
     }
 }

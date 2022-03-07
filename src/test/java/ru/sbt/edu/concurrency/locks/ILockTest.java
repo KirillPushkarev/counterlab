@@ -1,10 +1,7 @@
 package ru.sbt.edu.concurrency.locks;
 
 import org.junit.jupiter.api.Test;
-import ru.sbt.edu.concurrency.counter.Counter;
-import ru.sbt.edu.concurrency.counter.ILockCounter;
-import ru.sbt.edu.concurrency.counter.MagicCounter;
-import ru.sbt.edu.concurrency.counter.SeqCounter;
+import ru.sbt.edu.concurrency.counter.*;
 import ru.sbt.edu.concurrency.locks.theory.PetersonLock;
 import ru.sbt.edu.concurrency.util.TwoThreadIds;
 
@@ -19,7 +16,7 @@ public class ILockTest {
         ILock lock = new PetersonLock();
         Counter counter = new ILockCounter(lock);
         //try: 1, 2, 10, 100, 1000
-        testCounter(counter, 10000, 2);
+        testCounter(counter, 1000, 2);
     }
 
     @Test
@@ -30,10 +27,17 @@ public class ILockTest {
     }
 
     @Test
+    public void testConcurrentCounter() {
+        Counter counter = new ConcurrentCounter();
+
+        testCounter(counter, 10000, 4);
+    }
+
+    @Test
     public void testMagicCounter() {
         Counter counter = new MagicCounter(2);
 
-        testCounter(counter, 1000, 2);
+        testCounter(counter, 10000, 4);
     }
 
     private void testCounter(Counter counter, int iters, int threadsCount) {
