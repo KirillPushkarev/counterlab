@@ -1,7 +1,7 @@
 package ru.sbt.edu.concurrency.counter;
 
 
-import ru.sbt.edu.concurrency.locks.ILock;
+import ru.sbt.edu.concurrency.lock.ILock;
 
 public class ILockCounter implements Counter {
     private final ILock lock;

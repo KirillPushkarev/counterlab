@@ -1,6 +1,6 @@
-package ru.sbt.edu.concurrency.locks.theory;
+package ru.sbt.edu.concurrency.lock.theory;
 
-import ru.sbt.edu.concurrency.locks.ILock;
+import ru.sbt.edu.concurrency.lock.ILock;
 import ru.sbt.edu.concurrency.util.TwoThreadIds;
 
 public class LockZero implements ILock {

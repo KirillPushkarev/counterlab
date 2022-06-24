@@ -1,10 +1,10 @@
-package ru.sbt.edu.concurrency.locks;
+package ru.sbt.edu.concurrency.lock;
 
 import org.junit.jupiter.api.Test;
 import ru.sbt.edu.concurrency.counter.*;
-import ru.sbt.edu.concurrency.locks.theory.BakeryLock;
-import ru.sbt.edu.concurrency.locks.theory.PetersonLock;
-import ru.sbt.edu.concurrency.locks.theory.TaTaSLock;
+import ru.sbt.edu.concurrency.lock.theory.BakeryLock;
+import ru.sbt.edu.concurrency.lock.theory.PetersonLock;
+import ru.sbt.edu.concurrency.lock.theory.TaTaSLock;
 import ru.sbt.edu.concurrency.util.TwoThreadIds;
 
 import java.util.ArrayList;

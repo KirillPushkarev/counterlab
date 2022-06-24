@@ -1,4 +1,4 @@
-package ru.sbt.edu.concurrency.locks;
+package ru.sbt.edu.concurrency.lock;
 
 public interface ILock {
     void lock();
