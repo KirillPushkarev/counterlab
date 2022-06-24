@@ -2,7 +2,9 @@ package ru.sbt.edu.concurrency.locks;
 
 import org.junit.jupiter.api.Test;
 import ru.sbt.edu.concurrency.counter.*;
+import ru.sbt.edu.concurrency.locks.theory.BakeryLock;
 import ru.sbt.edu.concurrency.locks.theory.PetersonLock;
+import ru.sbt.edu.concurrency.locks.theory.TaTaSLock;
 import ru.sbt.edu.concurrency.util.TwoThreadIds;
 
 import java.util.ArrayList;
@@ -12,11 +14,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ILockTest {
     @Test
-    public void testTheoryLock() {
+    public void testPetersonLock() {
         ILock lock = new PetersonLock();
         Counter counter = new ILockCounter(lock);
-        //try: 1, 2, 10, 100, 1000
         testCounter(counter, 1000, 2);
+    }
+
+    @Test
+    public void testBakeryLock() {
+        ILock lock = new BakeryLock(40);
+        Counter counter = new ILockCounter(lock);
+        testCounter(counter, 10000, 4);
+    }
+
+    @Test
+    public void testTaTaSLock() {
+        ILock lock = new TaTaSLock();
+        Counter counter = new ILockCounter(lock);
+        testCounter(counter, 10000, 4);
     }
 
     @Test
@@ -35,7 +50,7 @@ public class ILockTest {
 
     @Test
     public void testMagicCounter() {
-        Counter counter = new MagicCounter(2);
+        Counter counter = new MagicCounter(4);
 
         testCounter(counter, 10000, 4);
     }
