@@ -3,6 +3,7 @@ package ru.sbt.edu.concurrency.lock;
 import org.junit.jupiter.api.Test;
 import ru.sbt.edu.concurrency.counter.*;
 import ru.sbt.edu.concurrency.lock.theory.BakeryLock;
+import ru.sbt.edu.concurrency.lock.theory.FilterLock;
 import ru.sbt.edu.concurrency.lock.theory.PetersonLock;
 import ru.sbt.edu.concurrency.lock.theory.TaTaSLock;
 import ru.sbt.edu.concurrency.util.TwoThreadIds;
@@ -21,8 +22,15 @@ public class ILockTest {
     }
 
     @Test
+    public void testFilterLock() {
+        ILock lock = new FilterLock(4);
+        Counter counter = new ILockCounter(lock);
+        testCounter(counter, 10000, 4);
+    }
+
+    @Test
     public void testBakeryLock() {
-        ILock lock = new BakeryLock(40);
+        ILock lock = new BakeryLock(4);
         Counter counter = new ILockCounter(lock);
         testCounter(counter, 10000, 4);
     }
